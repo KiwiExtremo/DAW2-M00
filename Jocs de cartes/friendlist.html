@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    <link rel="stylesheet" href="styles.css">
 
     <title>Zogemkarten</title>
 
@@ -33,7 +34,7 @@
                 <button class="mx-5 py-3">Multijugador</button>
                 <hr>
                 <button class="mx-5 py-3">Iniciar sessió</button>
-                <p class="login-separator">o</p>
+                <p class="login-separator"> o </p>
                 <button class="mx-5 py-3">Registrar-se</button>
                 <hr>
                 <div class="flex-grow-1 text-end">
@@ -45,11 +46,39 @@
             </main>
             <div class="friendlist-background">
                 <aside class="friendlist col-3 d-flex flex-column justify-content-center">
-                    <h2>Friendlist</h2>
-                    <h4>Connected</h4>
-                    <h4>disconnected</h4>
+                    <!-- Show only when invited to play by a friend -->
+                    <div class="invited-to-game">
+                        <div class="invite-info">
+                            <h5>Has sigut convitat a jugar</h5>
+                            <h5><span id="invite-game">Joc</span> per <span id="invite-friend">Juan</span></h5>
+                        </div>
+                        <button class="friend-control accept-btn"><i class="bi bi-check-circle-fill"></i></button>
+                        <button class="friend-control deny-btn"><i class="bi bi-x-circle-fill"></i></button>
+                    </div>
+
+                    <h2>Llista d'amics</h2>
+                    <h4>Connectats</h4>
+                    <table>
+                        <tr>
+                            <td>(img)</td>
+                            <td>Ariel</td>
+                            <td><button class="friend-control invite-btn"><i class="bi bi-file-arrow-up-fill"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <h4>Desconnectats</h4>
                     <div class="back-btn">
-                        <button class="dark-btn">➡</button>
+                        <button class="dark-btn"><i class="fa fa-arrow-left"></i></button>
+                    </div>
+                    <div class="add-friend-btn">
+                        <button class="add-btn"><i class="bi bi-person-fill-add"></i></button>
                     </div>
                 </aside>
             </div>

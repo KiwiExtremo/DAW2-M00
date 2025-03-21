@@ -14,7 +14,16 @@
     --tertiaryDark: #662500;
     --onTertiary: #662500;
 
-    --btnTransitionLength: 0.2s
+    --positiveColor: #0BE000;
+    --positiveDark: #078F00;
+    --onPositive: #033D00;
+
+    --negativeColor: #F42A0B;
+    --negativeDark: #AB1E08;
+    --onNegative: #611105;
+
+    --btnTransitionLength: 0.2s;
+    --boxShadowOutset: 5px 5px 0px;
 }
 
 html, body {
@@ -36,7 +45,7 @@ button:not(.input-group-text) {
     right: 0px;
     bottom: 5px;
     padding: 1em 1.5em;
-    box-shadow: 5px 5px 0px var(--onSecondary);
+    box-shadow: var(--boxShadowOutset) var(--onSecondary);
     -webkit-box-shadow: 5px 5px 0px var(--onSecondary);
     background-color: var(--secondaryColor);
     border: solid 3px var(--onSecondary);
@@ -52,9 +61,30 @@ button:not(.input-group-text) {
         background-color: var(--secondaryDark);
         border-color: var(--onSecondary);
         color: white;
+        font-weight: bolder;
 
         &::before {
             background-color: var(--onSecondary);
+        }
+    }
+
+    &.friend-control {
+        font-size: 1.5em;
+        padding: 0.25em 0.5em;
+        border-radius: 0.5em;
+
+        &.accept-btn {
+            background-color: var(--positiveColor);
+            border-color: var(--onPositive);
+            color: var(--onPositive);
+            box-shadow: var(--boxShadowOutset) var(--onPositive);
+        }
+
+        &.deny-btn {
+            background-color: var(--negativeColor);
+            border-color: var(--onNegative);
+            color: var(--onNegative);
+            box-shadow: var(--boxShadowOutset) var(--onNegative);
         }
     }
 
@@ -68,7 +98,7 @@ button:not(.input-group-text) {
         z-index: -1;
         background-color: var(--secondaryDark);
         opacity: 0;
-        border-radius: 0.9em;
+        border-radius: inherit;
         transition: transform var(--btnTransitionLength) ease-in-out, opacity var(--btnTransitionLength) ease-in-out;
         transform: scale(0.2);
     }
@@ -126,7 +156,7 @@ nav {
             height: 100%;
             text-align: center;
             padding: 1em 1.5em;
-            border-radius: 15px;
+            border-radius: inherit;
             text-decoration: none;
             font-weight: bold;
             color: var(--onPrimary);
@@ -138,7 +168,7 @@ nav {
 
             a {
                 background-color: var(--primaryLight);
-                border-radius: 15px;
+                border-radius: inherit;
             }
         }
 
@@ -148,7 +178,7 @@ nav {
 
             a {
                 background-color: var(--primaryDark);
-                border-radius: 15px;
+                border-radius: inherit;
                 top: 5px;
                 left: 5px;
             }
