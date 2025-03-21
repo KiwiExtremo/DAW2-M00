@@ -1,0 +1,266 @@
+:root {
+    --primaryLight: #fabc49;
+    --primaryColor: #ffa500;
+    --primaryDark: #e78b00;
+    --onPrimary: #662500;
+
+    --secondaryLight: #9BBDEF;
+    --secondaryColor: #6D96D4;
+    --secondaryDark: #2C599D;
+    --onSecondary: #071c52;
+
+    --tertiaryLight: #662500;
+    --tertiaryColor: #662500;
+    --tertiaryDark: #662500;
+    --onTertiary: #662500;
+
+    --btnTransitionLength: 0.2s
+}
+
+html, body {
+    height: 100%;
+}
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--primaryLight);
+    
+}
+
+button:not(.input-group-text) {
+    position: relative;
+    right: 0px;
+    bottom: 5px;
+    padding: 1em 1.5em;
+    box-shadow: 5px 5px 0px var(--onSecondary);
+    -webkit-box-shadow: 5px 5px 0px var(--onSecondary);
+    background-color: var(--secondaryColor);
+    border: solid 3px var(--onSecondary);
+    border-radius: 0.9em;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--onSecondary);
+    z-index: 1;
+    overflow: hidden;
+    transition: right 0.2s ease-in-out, bottom 0.2s ease-in-out, color var(--btnTransitionLength) ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &.dark-btn {
+        background-color: var(--secondaryDark);
+        border-color: var(--onSecondary);
+        color: white;
+
+        &::before {
+            background-color: var(--onSecondary);
+        }
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-color: var(--secondaryDark);
+        opacity: 0;
+        border-radius: 0.9em;
+        transition: transform var(--btnTransitionLength) ease-in-out, opacity var(--btnTransitionLength) ease-in-out;
+        transform: scale(0.2);
+    }
+
+    &:hover, &:focus {
+        color: white;
+
+        &::before {
+            transform: scale(1.1);
+            opacity: 0.5;
+        }
+    }
+
+    &:active {
+        box-shadow: 0px 0px var(--onSecondary);
+        bottom: -1px;
+        right: -5px;
+    }
+}
+
+button.input-group-text {
+    font-size: 1.5em;
+    font-weight: bolder;
+
+    &#show-confirm-password {
+        display: none;
+    }
+}
+
+nav {
+    background-color: var(--primaryColor);
+    height: 10%;
+    padding: 1em;
+}
+
+.top-navbar {
+    height: 100%;
+    list-style-type: none;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+
+    li {
+        border: solid 3px transparent;
+        border-radius: 15px;
+        box-shadow: inset 0px 0px var(--onPrimary);
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        overflow: hidden;
+
+        a {
+            display: block;
+            position: relative;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+            text-align: center;
+            padding: 1em 1.5em;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            color: var(--onPrimary);
+            transition: top 0.2s ease-in-out, left 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        }
+
+        &:not(.left-navbtn):has(a:hover:not(.active)), &:not(.left-navbtn):has(a:focus:not(.active)) {
+            border-color: var(--onPrimary);
+
+            a {
+                background-color: var(--primaryLight);
+                border-radius: 15px;
+            }
+        }
+
+        &:not(.left-navbtn):has(a.active), &:not(.left-navbtn):has(a:active:not(.active)) {
+            box-shadow: inset 5px 5px var(--onPrimary);
+            border-color: var(--primaryColor); /* Possibly change this to onPrimary */
+
+            a {
+                background-color: var(--primaryDark);
+                border-radius: 15px;
+                top: 5px;
+                left: 5px;
+            }
+        }
+
+        &.left-navbtn {
+            float: left;
+
+            a {
+                font-size: 1.5em;
+                padding: 0.5em 1.5em;
+            }
+        }
+    }
+}
+
+.container-fluid {
+    height: 90%;
+}
+
+hr {
+    text-align: center;
+    overflow: visible;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: calc(4vh - 5px);
+    margin-bottom: 4vh;
+
+    &::after {
+        font-size: 2em;
+        content: "♦";
+    }
+}
+
+.login-separator {
+    text-align: center;
+    vertical-align: top;
+    margin-top: calc(1vh - 5px);
+    margin-bottom: calc(1vh + 5px);
+    font-size: 1.5em;
+
+    &::before, &::after {
+        content: "——";
+        font-weight: lighter;
+    }
+}
+
+.side-navbar {
+    background-color: var(--primaryLight);
+    color: var(--onPrimary);
+
+    .title {
+        flex-grow: 2;
+    }
+}
+
+.friendlist-background {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 90%;
+    overflow: hidden;
+
+    /* By default, the friendlist and its background will be hidden */
+    display: flex; /* Should be none, set to flex for testing purposes */
+    justify-content: flex-end;
+
+    &.visible {
+        display: flex;
+    }
+}
+
+.friendlist {
+    background-color: var(--primaryColor);
+    color: var(--onPrimary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    /* By default, should be a negative percentage, enough to hide the sidebar completely */
+    right: 0px; /* Should be -(colspan * 8.33333333)%, set to 0px for testing purposes */
+
+    &.opened {
+        right: 0;
+    }
+
+    .back-btn {
+        font-size: 0.8em;
+        left: auto;
+        right: 3vw;
+    }
+}
+
+.main-content {
+    background-color: var(--primaryLight);
+}
+
+label {
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.back-btn {
+    position: absolute;
+    bottom: 3vw;
+    left: 3vw;
+    font-size: 1.3em;
+}
