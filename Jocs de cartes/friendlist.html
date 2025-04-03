@@ -30,55 +30,145 @@
                 <div class="title d-flex flex-column justify-content-center">
                     <h1 class="text-center">Zogemkarten</h1>
                 </div>
-                <button class="my-3 mx-5 py-3">Un sol jugador</button>
-                <button class="mx-5 py-3">Multijugador</button>
+                <button class="my-3 mx-5 py-3" tabindex="-1">Un sol jugador</button>
+                <button class="mx-5 py-3" tabindex="-1">Multijugador</button>
                 <hr>
-                <button class="mx-5 py-3">Iniciar sessió</button>
+                <button class="mx-5 py-3" tabindex="-1">Iniciar sessió</button>
                 <p class="login-separator"> o </p>
-                <button class="mx-5 py-3">Registrar-se</button>
+                <button class="mx-5 py-3" tabindex="-1">Registrar-se</button>
                 <hr>
                 <div class="flex-grow-1 text-end">
-                    <h5><a href="game.html" class="align-self-end mb-5">Continuar com a convidat</a></h5>
+                    <h5><a href="game.html" class="align-self-end mb-5" tabindex="-1">Continuar com a convidat</a></h5>
                 </div>
             </aside>
-            <main class="main-content col-9">
+            <main class="main-content home-animation col-9">
                 <h1>(animació)</h1>
             </main>
             <div class="friendlist-background">
-                <aside class="friendlist col-3 d-flex flex-column justify-content-center">
+                <aside class="friendlist col-3 d-flex flex-column justify-content-start py-5">
                     <!-- Show only when invited to play by a friend -->
-                    <div class="invited-to-game">
+                    <div class="invited-to-game mb-3 p-3">
                         <div class="invite-info">
-                            <h5>Has sigut convitat a jugar</h5>
-                            <h5><span id="invite-game">Joc</span> per <span id="invite-friend">Juan</span></h5>
+                            <h4>Invitació</h4>
+                            <h5><span id="invite-game">Solitari</span> per <span id="invite-friend">JuanitoX</span></h5>
                         </div>
-                        <button class="friend-control accept-btn"><i class="bi bi-check-circle-fill"></i></button>
-                        <button class="friend-control deny-btn"><i class="bi bi-x-circle-fill"></i></button>
+                        <div class="invite-btns">
+                            <button class="friend-control accept-btn"><i class="bi bi-check-circle-fill"></i></button>
+                            <button class="friend-control deny-btn"><i class="bi bi-x-circle-fill"></i></button>
+                        </div>
                     </div>
 
                     <h2>Llista d'amics</h2>
-                    <h4>Connectats</h4>
-                    <table>
-                        <tr>
-                            <td>(img)</td>
-                            <td>Ariel</td>
-                            <td><button class="friend-control invite-btn"><i class="bi bi-file-arrow-up-fill"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
-                    <h4>Desconnectats</h4>
-                    <div class="back-btn">
-                        <button class="dark-btn"><i class="fa fa-arrow-left"></i></button>
+                    <div class="friendlist-wrapper">
+                        <div class="accordion-title opened">
+                            <h4>Connectats</h4>
+                            <i class="fa fa-chevron-down"></i>
+
+                        </div>
+                        <table class="connected-friends">
+                            <tr>
+                                <td>
+                                    <img src="resources/default-user.jpg" class="img-fluid" alt="foto de perfil">
+                                </td>
+                                <td>
+                                    <h5>Ariel</h5>
+                                </td>
+                                <td>
+                                    <button class="friend-control invite-btn"><i class="bi bi-file-arrow-up-fill"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="resources/default-user.jpg" class="img-fluid" alt="foto de perfil">
+                                </td>
+                                <td>
+                                    <h5>Oscar</h5>
+                                </td>
+                                <td>
+                                    <button class="friend-control invite-btn"><i class="bi bi-file-arrow-up-fill"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="resources/default-user.jpg" class="img-fluid" alt="foto de perfil">
+                                </td>
+                                <td>
+                                    <h5>Nuria</h5>
+                                </td>
+                                <td>
+                                    <button class="friend-control invite-btn"><i class="bi bi-file-arrow-up-fill"></i></button>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="accordion-title opened">
+                            <h4>Desconnectats</h4>
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <table class="disconnected-friends">
+                            <tr>
+                                <td>
+                                    <img src="resources/default-user.jpg" class="img-fluid" alt="foto de perfil">
+                                </td>
+                                <td>
+                                    <h5>Juan</h5>
+                                </td>
+                                <td>
+                                    <button class="friend-control invite-btn disabled" tabindex="-1"><i class="bi bi-file-arrow-up-fill"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="resources/default-user.jpg" class="img-fluid" alt="foto de perfil">
+                                </td>
+                                <td>
+                                    <h5>Juan</h5>
+                                </td>
+                                <td>
+                                    <button class="friend-control invite-btn disabled" tabindex="-1"><i class="bi bi-file-arrow-up-fill"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="resources/default-user.jpg" class="img-fluid" alt="foto de perfil">
+                                </td>
+                                <td>
+                                    <h5>Juan</h5>
+                                </td>
+                                <td>
+                                    <button class="friend-control invite-btn disabled" tabindex="-1"><i class="bi bi-file-arrow-up-fill"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="resources/default-user.jpg" class="img-fluid" alt="foto de perfil">
+                                </td>
+                                <td>
+                                    <h5>Juan</h5>
+                                </td>
+                                <td>
+                                    <button class="friend-control invite-btn disabled" tabindex="-1"><i class="bi bi-file-arrow-up-fill"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="resources/default-user.jpg" class="img-fluid" alt="foto de perfil">
+                                </td>
+                                <td>
+                                    <h5>Juan</h5>
+                                </td>
+                                <td>
+                                    <button class="friend-control invite-btn disabled" tabindex="-1"><i class="bi bi-file-arrow-up-fill"></i></button>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
+                    
                     <div class="add-friend-btn">
                         <button class="add-btn"><i class="bi bi-person-fill-add"></i></button>
+                    </div>
+
+                    <div class="back-btn">
+                        <button class="dark-btn"><i class="fa fa-arrow-left"></i></button>
                     </div>
                 </aside>
             </div>

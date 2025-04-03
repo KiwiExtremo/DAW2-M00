@@ -14,10 +14,12 @@
     --tertiaryDark: #662500;
     --onTertiary: #662500;
 
+    --positiveLight: #bcffb8;
     --positiveColor: #0BE000;
     --positiveDark: #078F00;
     --onPositive: #033D00;
 
+    --negativeLight: #ffaea1;
     --negativeColor: #F42A0B;
     --negativeDark: #AB1E08;
     --onNegative: #611105;
@@ -77,14 +79,95 @@ button:not(.input-group-text) {
             background-color: var(--positiveColor);
             border-color: var(--onPositive);
             color: var(--onPositive);
-            box-shadow: var(--boxShadowOutset) var(--onPositive);
+            box-shadow: 2px 2px var(--onPositive);
+
+            &:hover, &:focus {
+                width: 150px;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-around;
+                align-items: center;
+
+                &::after {
+                    content: 'acceptar';
+                    font-size: 1.1rem;
+                    font-family: var(--bs-font-sans-serif);
+                    padding-right: 10px;
+                }
+            }
+
+            &:active {
+                box-shadow: 0px 0px var(--onPositive);
+                bottom: 2.5px;
+                right: -2px;
+            }
+
+            &::before {
+                background-color: var(--positiveLight);
+            }
         }
 
         &.deny-btn {
             background-color: var(--negativeColor);
             border-color: var(--onNegative);
             color: var(--onNegative);
-            box-shadow: var(--boxShadowOutset) var(--onNegative);
+            box-shadow: 2px 2px var(--onNegative);
+
+            &:hover, &:focus {
+                width: 150px;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-around;
+                align-items: center;
+
+                &::after {
+                    content: 'rebutjar';
+                    font-size: 1.1rem;
+                    font-family: var(--bs-font-sans-serif);
+                    padding-right: 10px;
+                }
+            }
+
+            &:active {
+                box-shadow: 0px 0px var(--onNegative);
+                bottom: 2.5px;
+                right: -2px;
+            }
+
+            &::before {
+                background-color: var(--negativeLight);
+            }
+        }
+
+        &.invite-btn {
+            transition: width var(--btnTransitionLength) ease-in-out;
+
+            &:hover, &:focus {
+                width: 150px;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-around;
+                align-items: center;
+
+                &::after {
+                    content: 'convidar';
+                    font-size: 1.1rem;
+                    font-family: var(--bs-font-sans-serif);
+                    padding-right: 10px;
+                }
+            }
+
+            &.disabled {
+                color: #46525D;
+                background-color: #96A5B0;
+                border-color: #46525D;
+                box-shadow: 5px 5px #46525D;
+
+                &:hover, &:focus {
+                    color: #46525D;
+                    pointer-events: none;
+                }
+            }
         }
     }
 
@@ -112,7 +195,7 @@ button:not(.input-group-text) {
         }
     }
 
-    &:active {
+    &:active:not(.disabled) {
         box-shadow: 0px 0px var(--onSecondary);
         bottom: -1px;
         right: -5px;
@@ -237,7 +320,8 @@ hr {
     }
 }
 
-.friendlist-background {
+
+.friendlist-background, .profile-background {
     background-color: rgba(0, 0, 0, 0.3);
     padding: 0;
     position: absolute;
@@ -257,13 +341,15 @@ hr {
     }
 }
 
-.friendlist {
+.friendlist, .profile {
     background-color: var(--primaryColor);
     color: var(--onPrimary);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
 
     /* By default, should be a negative percentage, enough to hide the sidebar completely */
     right: 0px; /* Should be -(colspan * 8.33333333)%, set to 0px for testing purposes */
@@ -279,8 +365,124 @@ hr {
     }
 }
 
-.main-content {
+.friendlist-wrapper, .profile-wrapper {
+    height: 60%;
+    width: 100%;
+    padding-right: 5px;
+    margin-bottom: 20px;
+    overflow-y: scroll;
+    border-bottom: solid 3px var(--onPrimary);
+}
+
+.accordion-title {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    border: solid 3px var(--onPrimary);
+    border-radius: 15px;
+    margin-bottom: 10px;
+
+    h4 {
+        margin-bottom: 0.25rem;
+    }
+}
+
+.main-content:not(.home-animation) {
     background-color: var(--primaryLight);
+}
+
+.home-animation {
+    background-color: var(--secondaryLight);
+}
+
+form {
+    color: var(--onPrimary);
+}
+
+.invited-to-game {
+    background-color: var(--secondaryLight);
+    color: var(--onSecondary);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 20px;
+    border: solid 3px var(--onSecondary);
+    border-radius: 1em;
+    width: 100%;
+
+    h5 {
+        margin-bottom: 0;
+    }
+
+    .accept-btn {
+        margin-right: 5px;
+    }
+
+    .invite-info {
+        flex-grow: 1;
+
+        h4 {
+            text-align: center;
+            padding-bottom: 0.5em;
+            border-bottom: solid 3px var(--onSecondary);
+        }
+    }
+    .invite-btns {
+        flex-grow: 1;
+        display: flex;
+        justify-content: end;
+    }
+}
+
+.connected-friends {
+    margin-bottom: 5vh;
+}
+
+.connected-friends, .disconnected-friends {    
+    margin-left: 10px;
+    margin-right: 10px;
+
+    tr:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
+    td:first-child {
+        width: 15%;
+    }
+
+    td:not(:first-child) {
+        padding: 5px;
+    }
+
+    td:nth-child(2) {
+        padding-left: 10px;
+        
+        h5 {
+            margin-bottom: 0;
+        }
+    }
+
+    td:last-child {
+        width: 20%;
+        text-align: end;
+    }
+
+    img {
+        border-radius: 100%;
+        border: solid 3px var(--onPrimary);
+    }
+}
+
+.profile {
+
+    img {
+        max-width: 50%;
+        border-radius: 100%;
+        border: solid 3px var(--onPrimary);
+        margin-bottom: 2vh;
+    }
 }
 
 label {
