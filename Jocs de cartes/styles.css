@@ -42,7 +42,7 @@ body {
     
 }
 
-button:not(.input-group-text) {
+button:not(.input-group-text), a.btn {
     position: relative;
     right: 0px;
     bottom: 5px;
@@ -363,13 +363,17 @@ hr {
         left: auto;
         right: 3vw;
     }
+
+    .add-btn i, .edit-btn i {
+        margin-right: 1em;
+    }
 }
 
 .friendlist-wrapper, .profile-wrapper {
     height: 60%;
     width: 100%;
     padding-right: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     overflow-y: scroll;
     scrollbar-color: var(--onPrimary) var(--primaryColor);
     border-bottom: solid 3px var(--onPrimary);
@@ -479,12 +483,24 @@ form {
 }
 
 .profile {
+    .profile-wrapper {
+        border: none;
+    }
 
     img {
         max-width: 50%;
         border-radius: 100%;
         border: solid 3px var(--onPrimary);
         margin-bottom: 2vh;
+    }
+
+    dt {
+        margin-top: 20px;
+        font-size: 1.5em;
+    }
+
+    dd {
+        font-size: 1.3em;
     }
 }
 
@@ -509,7 +525,8 @@ label {
 .close-btn {
     font-size: 2em;
     margin-top: -10px;
-    
+    cursor: pointer;
+
     i {
         -webkit-text-stroke: 1px;
     }

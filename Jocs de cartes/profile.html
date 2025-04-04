@@ -11,6 +11,17 @@
     <title>Zogemkarten</title>
 
     <script src="script.js"></script>
+    <script>
+        window.onload = init;
+
+        function init() {
+            document.getElementsByClassName("close-btn")[0].addEventListener("click", closeProfile);
+        }
+
+        function closeProfile() {
+            document.location = "home.html";
+        }
+    </script>
 </head>
 <body>
     <nav>
@@ -50,11 +61,19 @@
                     <img src="resources/default-user.jpg" alt="foto de perfil">
                     <h2>Ariel Gómez</h2>
                     <div class="profile-wrapper">
-                        <h5><i class="fa fa-gamepad" aria-hidden="true"></i> Partides jugades: <span>15</span></h5>
-                        <h5><i class="fa fa-trophy" aria-hidden="true"></i> Partides guanyades: <span>8</span></h5>
+                        <dl>
+                            <dt>Email:</dt>
+                            <dd>thearielcompany@gmail.com</dd>
+
+                            <dt>Partides jugades:</dt>
+                            <dd>15 partides</dd>
+
+                            <dt>Partides guanyades:</dt>
+                            <dd>9 partides</dd>
+                        </dl>
                     </div>
                     <div class="edit-profile-btn">
-                        <button class="edit-btn">Edit profile</button>
+                        <button class="edit-btn"><i class="bi bi-pencil-fill"></i>Editar perfil</button>
                     </div>
                     <div class="close-btn-wrapper">
                         <div class="close-btn"><i class="bi bi-x-circle"></i></div>

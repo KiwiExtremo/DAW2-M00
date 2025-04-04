@@ -23,6 +23,8 @@
 
             document.getElementsByClassName("deny-btn")[0].addEventListener("click", closeInvitation);
             document.getElementsByClassName("accept-btn")[0].addEventListener("click", closeInvitation);
+
+            document.getElementsByClassName("close-btn")[0].addEventListener("click", closeFriendlist);
         }
 
         function toggleAccordion() {
@@ -43,6 +45,10 @@
             var invitation = document.getElementsByClassName("invited-to-game")[0];
 
             invitation.style.display = "none";
+        }
+
+        function closeFriendlist() {
+            document.location = "home.html";
         }
     </script>
 </head>
@@ -98,7 +104,6 @@
                         <div class="accordion-title opened">
                             <h4>Connectats</h4>
                             <i class="fa fa-chevron-down"></i>
-
                         </div>
                         <table class="connected-friends">
                             <tr>
@@ -199,11 +204,11 @@
                     </div>
                     
                     <div class="add-friend-btn">
-                        <button class="add-btn"><i class="bi bi-person-fill-add"></i></button>
+                        <button class="add-btn"><i class="bi bi-person-fill-add"></i>Afegir amics</button>
                     </div>
 
-                    <div class="back-btn">
-                        <button class="dark-btn"><i class="fa fa-arrow-left"></i></button>
+                    <div class="close-btn-wrapper">
+                        <div class="close-btn"><i class="bi bi-x-circle"></i></div>
                     </div>
                 </aside>
             </div>
