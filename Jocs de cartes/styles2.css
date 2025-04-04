@@ -1,0 +1,145 @@
+.btn {
+    position: relative;
+    right: 0px;
+    bottom: 5px;
+    padding: 1em 1.5em;
+    box-shadow: 5px 5px 0px;
+    border: solid 3px;
+    border-radius: 0.9em;
+    font-size: 1.5rem;
+    font-weight: bold;
+    z-index: 1;
+    overflow: hidden;
+    transition: right 0.2s ease-in-out, bottom 0.2s ease-in-out, color var(--btnTransitionLength) ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hoverable-btn {
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        opacity: 0;
+        border-radius: inherit;
+        transition: transform var(--btnTransitionLength) ease-in-out, opacity var(--btnTransitionLength) ease-in-out;
+        transform: scale(0.2);
+    }
+
+    &:hover, &:focus {
+        color: white;
+
+        &::before {
+            transform: scale(1.1);
+            opacity: 0.5;
+        }
+    }
+}
+
+.pressable-btn:active {
+    box-shadow: 0px 0px;
+    bottom: -1px;
+    right: -5px;
+
+    &.friend-control-btn {
+        bottom: 2.5px;
+        right: -2px;
+    }
+}
+
+.input-group-text {
+    font-size: 1.5em;
+    font-weight: bolder;
+
+    &#show-confirm-password {
+        display: none;
+    }
+}
+
+.blue-btn {
+    background-color: var(--secondaryColor);
+    color: var(--onSecondary);
+
+    &::before {
+        background-color: var(--secondaryDark);
+    }
+}
+
+.dark-btn {
+    background-color: var(--secondaryDark);
+    border-color: var(--onSecondary);
+    color: white;
+    font-weight: bolder;
+
+    &::before {
+        background-color: var(--onSecondary);
+    }
+}
+
+.friend-control-btn {
+    font-size: 1.5rem;
+    padding: 0.25em 0.5em;
+    border-radius: 0.5em;
+}
+
+.accept-btn {
+    background-color: var(--positiveColor);
+    color: var(--onPositive);
+
+    &:hover, &:focus {
+        width: 150px;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-around;
+        align-items: center;
+
+        &::after {
+            content: 'acceptar';
+            font-size: 1.1rem;
+            font-family: var(--bs-font-sans-serif);
+            padding-right: 10px;
+        }
+    }
+
+    &::before {
+        background-color: var(--positiveLight);
+    }
+}
+
+.deny-btn {
+    background-color: var(--negativeColor);
+    color: var(--onNegative);
+
+    &:hover, &:focus {
+        width: 150px;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-around;
+        align-items: center;
+
+        &::after {
+            content: 'rebutjar';
+            font-size: 1.1rem;
+            font-family: var(--bs-font-sans-serif);
+            padding-right: 10px;
+        }
+    }
+
+    &::before {
+        background-color: var(--negativeLight);
+    }
+}
+
+.disabled-btn {
+    color: #46525D;
+    background-color: #96A5B0;
+
+    &:hover, &:focus {
+        color: #46525D;
+        pointer-events: none;
+        cursor: default;
+    }
+}
+

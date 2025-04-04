@@ -65,7 +65,7 @@ button:not(.input-group-text) {
         color: white;
         font-weight: bolder;
 
-        &::before {
+        &:not(.disabled)::before {
             background-color: var(--onSecondary);
         }
     }
@@ -142,7 +142,7 @@ button:not(.input-group-text) {
         &.invite-btn {
             transition: width var(--btnTransitionLength) ease-in-out;
 
-            &:hover, &:focus {
+            &:not(.disabled):hover, &:not(.disabled):focus {
                 width: 150px;
                 display: flex;
                 flex-direction: row-reverse;
@@ -164,14 +164,13 @@ button:not(.input-group-text) {
                 box-shadow: 5px 5px #46525D;
 
                 &:hover, &:focus {
-                    color: #46525D;
                     pointer-events: none;
                 }
             }
         }
     }
 
-    &::before {
+    &:not(.disabled)::before {
         content: '';
         position: absolute;
         top: 0;
@@ -184,13 +183,14 @@ button:not(.input-group-text) {
         border-radius: inherit;
         transition: transform var(--btnTransitionLength) ease-in-out, opacity var(--btnTransitionLength) ease-in-out;
         transform: scale(0.2);
+        filter: blur(10px);
     }
 
     &:hover, &:focus {
         color: white;
 
         &::before {
-            transform: scale(1.1);
+            transform: scale(2);
             opacity: 0.5;
         }
     }
@@ -206,14 +206,14 @@ button.input-group-text {
     font-size: 1.5em;
     font-weight: bolder;
 
-    &#show-confirm-password {
+    &#show-confirm-password:disabled {
         display: none;
     }
 }
 
 nav {
     background-color: var(--primaryColor);
-    height: 10%;
+    height: 6em;
     padding: 1em;
 }
 
@@ -279,7 +279,7 @@ nav {
 }
 
 .container-fluid {
-    height: 90%;
+    height: calc(100% - 6em);
 }
 
 hr {
@@ -329,7 +329,7 @@ hr {
     left: 0;
     z-index: 100;
     width: 100%;
-    height: 90%;
+    height: calc(100% - 6em);
     overflow: hidden;
 
     /* By default, the friendlist and its background will be hidden */
@@ -371,6 +371,7 @@ hr {
     padding-right: 5px;
     margin-bottom: 20px;
     overflow-y: scroll;
+    scrollbar-color: var(--onPrimary) var(--primaryColor);
     border-bottom: solid 3px var(--onPrimary);
 }
 
@@ -383,6 +384,8 @@ hr {
     border: solid 3px var(--onPrimary);
     border-radius: 15px;
     margin-bottom: 10px;
+    user-select: none;
+    cursor: pointer;
 
     h4 {
         margin-bottom: 0.25rem;
@@ -495,4 +498,19 @@ label {
     bottom: 3vw;
     left: 3vw;
     font-size: 1.3em;
+}
+
+.close-btn-wrapper {
+    position: absolute;
+    top: 2vh;
+    left: 2vh;
+}
+
+.close-btn {
+    font-size: 2em;
+    margin-top: -10px;
+    
+    i {
+        -webkit-text-stroke: 1px;
+    }
 }
