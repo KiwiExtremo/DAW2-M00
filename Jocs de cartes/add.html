@@ -25,7 +25,13 @@
             document.getElementsByClassName("accept-btn")[0].addEventListener("click", closeInvitation);
 
             document.getElementsByClassName("close-btn")[0].addEventListener("click", closeFriendlist);
-            document.getElementsByClassName("add-friend-btn")[0].addEventListener("click", showModal);
+        
+            var modal = document.getElementById("add-friend-modal");
+            modal.showModal();
+
+            document.getElementsByClassName("confirm-btn")[0].addEventListener("click", () => {
+                modal.close();
+            });
         }
 
         function toggleAccordion() {
@@ -51,13 +57,20 @@
         function closeFriendlist() {
             document.location = "home.html";
         }
-
-        function showModal() {
-            document.location = "add.html";
-        }
     </script>
 </head>
 <body>
+    <dialog id="add-friend-modal">
+        <div class="modal-wrapper">
+            <h1>Afegir nou amic</h1>
+            <form action="#">
+                <label for="i-add-friend">nom d'usuari</label>
+                <input type="text" class="form-control" name="i-add-friend" id="i-add-friend">
+            </form>
+            <button class="confirm-btn"><i class="bi bi-person-fill-add"></i>Afegir</button>
+        </div>
+    </dialog>
+    
     <nav>
         <ul class="top-navbar">
             <!-- Show it when NOT on home page -->

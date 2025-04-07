@@ -200,6 +200,10 @@ button:not(.input-group-text), a.btn {
         bottom: -1px;
         right: -5px;
     }
+    
+    &.add-btn i, &.edit-btn i, &.confirm-btn i {
+        margin-right: 1em;
+    }
 }
 
 button.input-group-text {
@@ -363,10 +367,6 @@ hr {
         left: auto;
         right: 3vw;
     }
-
-    .add-btn i, .edit-btn i {
-        margin-right: 1em;
-    }
 }
 
 .friendlist-wrapper, .profile-wrapper {
@@ -529,5 +529,50 @@ label {
 
     i {
         -webkit-text-stroke: 1px;
+    }
+}
+
+/* Modal CSS */
+#add-friend-modal {
+    background-color: var(--primaryColor);
+    border: solid 3px var(--onPrimary);
+    border-radius: 2em;
+    padding: 1em 3em 2em;
+    min-width: 35%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-wrapper {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8em;
+    color: var(--onPrimary);
+
+    h1 {
+        font-size: 2.7em;
+        padding-bottom: 0.5em;
+        border-bottom: solid 3px var(--onPrimary);
+    }
+
+    label {
+        font-size: 2em;
+    }
+
+    .confirm-btn {
+        margin-top: 2em;
+        align-self: flex-end;
+    }
+}
+
+/* Screen sizes of 760px or less */
+@media only screen and (max-width: 1500px) {
+    body {
+      font-size: 0.9em;
+    }
+
+    form[name="register"] .title, form[name="login"] .title {
+        margin-top: 3vh !important;
     }
 }
