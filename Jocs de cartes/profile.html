@@ -19,7 +19,13 @@
         }
 
         function closeProfile() {
-            document.location = "home.html";
+            var profile = document.getElementsByClassName("profile")[0];
+
+            profile.style.transform = "translateX(100%)";
+
+            setTimeout(() => {
+                document.location = "home.html";
+            }, 500);
         }
     </script>
 </head>

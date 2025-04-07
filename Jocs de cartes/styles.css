@@ -354,6 +354,7 @@ hr {
     position: relative;
     padding-left: 2.5vw;
     padding-right: 2.5vw;
+    transition: transform 0.5s ease-in-out;
 
     /* By default, should be a negative percentage, enough to hide the sidebar completely */
     right: 0px; /* Should be -(colspan * 8.33333333)%, set to 0px for testing purposes */
