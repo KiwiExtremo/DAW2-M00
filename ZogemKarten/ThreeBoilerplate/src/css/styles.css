@@ -1,0 +1,591 @@
+:root {
+    --primaryLight: #fabc49;
+    --primaryColor: #ffa500;
+    --primaryDark: #e78b00;
+    --onPrimary: #662500;
+
+    --secondaryLight: #9BBDEF;
+    --secondaryColor: #6D96D4;
+    --secondaryDark: #2C599D;
+    --onSecondary: #071c52;
+
+    --tertiaryLight: #662500;
+    --tertiaryColor: #662500;
+    --tertiaryDark: #662500;
+    --onTertiary: #662500;
+
+    --positiveLight: #bcffb8;
+    --positiveColor: #0BE000;
+    --positiveDark: #078F00;
+    --onPositive: #033D00;
+
+    --negativeLight: #ffaea1;
+    --negativeColor: #F42A0B;
+    --negativeDark: #AB1E08;
+    --onNegative: #611105;
+
+    --btnTransitionLength: 0.2s;
+    --boxShadowOutset: 5px 5px 0px;
+}
+
+html, body {
+    height: 100%;
+}
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--primaryLight);
+    
+}
+
+button:not(.input-group-text), a.btn {
+    position: relative;
+    right: 0px;
+    bottom: 5px;
+    box-shadow: var(--boxShadowOutset) var(--onSecondary);
+    -webkit-box-shadow: 5px 5px 0px var(--onSecondary);
+    background-color: var(--secondaryColor);
+    border: solid 3px var(--onSecondary);
+    border-radius: 0.9em;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--onSecondary);
+    z-index: 1;
+    overflow: hidden;
+    transition: right 0.2s ease-in-out, bottom 0.2s ease-in-out, color var(--btnTransitionLength) ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:not(:has(a)) {
+        padding: 1rem 1.5em;
+    }
+
+    a {
+        display: inline-block;
+        color: inherit;
+        text-decoration: none;
+        height: 100%;
+        width: 100%;
+        padding: 1rem 1.5em;
+    }
+
+    &.dark-btn {
+        background-color: var(--secondaryDark);
+        border-color: var(--onSecondary);
+        color: white;
+        font-weight: bolder;
+
+        &:not(.disabled)::before {
+            background-color: var(--onSecondary);
+        }
+    }
+
+    &.friend-control {
+        font-size: 1.5em;
+        padding: 0.25em 0.5em;
+        border-radius: 0.5em;
+
+        &.accept-btn {
+            background-color: var(--positiveColor);
+            border-color: var(--onPositive);
+            color: var(--onPositive);
+            box-shadow: 2px 2px var(--onPositive);
+
+            &:hover, &:focus {
+                width: 150px;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-around;
+                align-items: center;
+
+                &::after {
+                    content: 'acceptar';
+                    font-size: 1.1rem;
+                    font-family: var(--bs-font-sans-serif);
+                    padding-right: 10px;
+                }
+            }
+
+            &:active {
+                box-shadow: 0px 0px var(--onPositive);
+                bottom: 2.5px;
+                right: -2px;
+            }
+
+            &::before {
+                background-color: var(--positiveLight);
+            }
+        }
+
+        &.deny-btn {
+            background-color: var(--negativeColor);
+            border-color: var(--onNegative);
+            color: var(--onNegative);
+            box-shadow: 2px 2px var(--onNegative);
+
+            &:hover, &:focus {
+                width: 150px;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-around;
+                align-items: center;
+
+                &::after {
+                    content: 'rebutjar';
+                    font-size: 1.1rem;
+                    font-family: var(--bs-font-sans-serif);
+                    padding-right: 10px;
+                }
+            }
+
+            &:active {
+                box-shadow: 0px 0px var(--onNegative);
+                bottom: 2.5px;
+                right: -2px;
+            }
+
+            &::before {
+                background-color: var(--negativeLight);
+            }
+        }
+
+        &.invite-btn {
+            transition: width var(--btnTransitionLength) ease-in-out;
+
+            &:not(.disabled):hover, &:not(.disabled):focus {
+                width: 150px;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-around;
+                align-items: center;
+
+                &::after {
+                    content: 'convidar';
+                    font-size: 1.1rem;
+                    font-family: var(--bs-font-sans-serif);
+                    padding-right: 10px;
+                }
+            }
+
+            &.disabled {
+                color: #46525D;
+                background-color: #96A5B0;
+                border-color: #46525D;
+                box-shadow: 5px 5px #46525D;
+
+                &:hover, &:focus {
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+
+    &:not(.disabled)::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-color: var(--secondaryDark);
+        opacity: 0;
+        border-radius: inherit;
+        transition: transform var(--btnTransitionLength) ease-in-out, opacity var(--btnTransitionLength) ease-in-out;
+        transform: scale(0.2);
+        filter: blur(10px);
+    }
+
+    &:hover, &:focus {
+        color: white;
+
+        &::before {
+            transform: scale(2);
+            opacity: 0.5;
+        }
+    }
+
+    &:active:not(.disabled) {
+        box-shadow: 0px 0px var(--onSecondary);
+        bottom: -1px;
+        right: -5px;
+    }
+    
+    &.add-btn i, &.edit-btn i, &.confirm-btn i {
+        margin-right: 1em;
+    }
+}
+
+button.input-group-text {
+    font-size: 1.5em;
+    font-weight: bolder;
+
+    &#show-confirm-password:disabled {
+        display: none;
+    }
+}
+
+nav {
+    background-color: var(--primaryColor);
+    height: 6em;
+    padding: 1em;
+}
+
+.top-navbar {
+    height: 100%;
+    list-style-type: none;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+
+    li {
+        border: solid 3px transparent;
+        border-radius: 15px;
+        box-shadow: inset 0px 0px var(--onPrimary);
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        overflow: hidden;
+
+        a {
+            display: block;
+            position: relative;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+            text-align: center;
+            padding: 1em 1.5em;
+            border-radius: inherit;
+            text-decoration: none;
+            font-weight: bold;
+            color: var(--onPrimary);
+            transition: top 0.2s ease-in-out, left 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        }
+
+        &:not(.left-navbtn):has(a:hover:not(.active)), &:not(.left-navbtn):has(a:focus:not(.active)) {
+            border-color: var(--onPrimary);
+
+            a {
+                background-color: var(--primaryLight);
+                border-radius: inherit;
+            }
+        }
+
+        &:not(.left-navbtn):has(a.active), &:not(.left-navbtn):has(a:active:not(.active)) {
+            box-shadow: inset 5px 5px var(--onPrimary);
+            border-color: var(--primaryColor); /* Possibly change this to onPrimary */
+
+            a {
+                background-color: var(--primaryDark);
+                border-radius: inherit;
+                top: 5px;
+                left: 5px;
+            }
+        }
+
+        &.left-navbtn {
+            float: left;
+
+            a {
+                font-size: 1.5em;
+                padding: 0.5em 1.5em;
+            }
+        }
+    }
+}
+
+.container-fluid {
+    height: calc(100% - 6em);
+}
+
+hr {
+    text-align: center;
+    overflow: visible;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: calc(4vh - 5px);
+    margin-bottom: 4vh;
+
+    &::after {
+        font-size: 2em;
+        content: "♦";
+    }
+}
+
+.login-separator {
+    text-align: center;
+    vertical-align: top;
+    margin-top: calc(1vh - 5px);
+    margin-bottom: calc(1vh + 5px);
+    font-size: 1.5em;
+
+    &::before, &::after {
+        content: "——";
+        font-weight: lighter;
+    }
+}
+
+.side-navbar {
+    background-color: var(--primaryLight);
+    color: var(--onPrimary);
+
+    .title {
+        flex-grow: 2;
+    }
+}
+
+
+.friendlist-background, .profile-background {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: calc(100% - 6em);
+    overflow: hidden;
+
+    /* By default, the friendlist and its background will be hidden */
+    display: flex; /* Should be none, set to flex for testing purposes */
+    justify-content: flex-end;
+
+    &.visible {
+        display: flex;
+    }
+}
+
+.friendlist, .profile {
+    background-color: var(--primaryColor);
+    color: var(--onPrimary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding-left: 2.5vw;
+    padding-right: 2.5vw;
+    transition: transform 0.5s ease-in-out;
+
+    /* By default, should be a negative percentage, enough to hide the sidebar completely */
+    right: 0px; /* Should be -(colspan * 8.33333333)%, set to 0px for testing purposes */
+
+    &.opened {
+        right: 0;
+    }
+
+    .back-btn {
+        font-size: 0.8em;
+        left: auto;
+        right: 3vw;
+    }
+}
+
+.friendlist-wrapper, .profile-wrapper {
+    height: 60%;
+    width: 100%;
+    padding-right: 5px;
+    margin-bottom: 30px;
+    overflow-y: scroll;
+    scrollbar-color: var(--onPrimary) var(--primaryColor);
+    border-bottom: solid 3px var(--onPrimary);
+}
+
+.accordion-title {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    border: solid 3px var(--onPrimary);
+    border-radius: 15px;
+    margin-bottom: 10px;
+    user-select: none;
+    cursor: pointer;
+
+    h4 {
+        margin-bottom: 0.25rem;
+    }
+}
+
+.main-content:not(.home-animation) {
+    background-color: var(--primaryLight);
+}
+
+.home-animation {
+    padding: 0 !important;
+}
+
+form {
+    color: var(--onPrimary);
+}
+
+.invited-to-game {
+    background-color: var(--secondaryLight);
+    color: var(--onSecondary);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 20px;
+    border: solid 3px var(--onSecondary);
+    border-radius: 1em;
+    width: 100%;
+
+    h5 {
+        margin-bottom: 0;
+    }
+
+    .accept-btn {
+        margin-right: 5px;
+    }
+
+    .invite-info {
+        flex-grow: 1;
+
+        h4 {
+            text-align: center;
+            padding-bottom: 0.5em;
+            border-bottom: solid 3px var(--onSecondary);
+        }
+    }
+    .invite-btns {
+        flex-grow: 1;
+        display: flex;
+        justify-content: end;
+    }
+}
+
+.connected-friends {
+    margin-bottom: 5vh;
+}
+
+.connected-friends, .disconnected-friends {    
+    margin-left: 10px;
+    margin-right: 10px;
+
+    tr:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
+    td:first-child {
+        width: 15%;
+    }
+
+    td:not(:first-child) {
+        padding: 5px;
+    }
+
+    td:nth-child(2) {
+        padding-left: 10px;
+        
+        h5 {
+            margin-bottom: 0;
+        }
+    }
+
+    td:last-child {
+        width: 20%;
+        text-align: end;
+    }
+
+    img {
+        border-radius: 100%;
+        border: solid 3px var(--onPrimary);
+    }
+}
+
+.profile {
+    .profile-wrapper {
+        border: none;
+    }
+
+    img {
+        max-width: 50%;
+        border-radius: 100%;
+        border: solid 3px var(--onPrimary);
+        margin-bottom: 2vh;
+    }
+
+    dt {
+        margin-top: 20px;
+        font-size: 1.5em;
+    }
+
+    dd {
+        font-size: 1.3em;
+    }
+}
+
+label {
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.back-btn {
+    position: absolute;
+    bottom: 3vw;
+    left: 3vw;
+    font-size: 1.3em;
+}
+
+.close-btn-wrapper {
+    position: absolute;
+    top: 2vh;
+    left: 2vh;
+}
+
+.close-btn {
+    font-size: 2em;
+    margin-top: -10px;
+    cursor: pointer;
+
+    i {
+        -webkit-text-stroke: 1px;
+    }
+}
+
+/* Modal CSS */
+#add-friend-modal {
+    background-color: var(--primaryColor);
+    border: solid 3px var(--onPrimary);
+    border-radius: 2em;
+    padding: 1em 3em 2em;
+    min-width: 35%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-wrapper {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8em;
+    color: var(--onPrimary);
+
+    h1 {
+        font-size: 2.7em;
+        padding-bottom: 0.5em;
+        border-bottom: solid 3px var(--onPrimary);
+    }
+
+    label {
+        font-size: 2em;
+    }
+
+    .confirm-btn {
+        margin-top: 2em;
+        align-self: flex-end;
+    }
+}
+
+/* Screen sizes of 760px or less */
+@media only screen and (max-width: 1500px) {
+    body {
+      font-size: 0.9em;
+    }
+
+    form[name="register"] .title, form[name="login"] .title {
+        margin-top: 3vh !important;
+    }
+}

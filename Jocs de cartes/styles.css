@@ -46,7 +46,6 @@ button:not(.input-group-text), a.btn {
     position: relative;
     right: 0px;
     bottom: 5px;
-    padding: 1em 1.5em;
     box-shadow: var(--boxShadowOutset) var(--onSecondary);
     -webkit-box-shadow: 5px 5px 0px var(--onSecondary);
     background-color: var(--secondaryColor);
@@ -58,6 +57,19 @@ button:not(.input-group-text), a.btn {
     z-index: 1;
     overflow: hidden;
     transition: right 0.2s ease-in-out, bottom 0.2s ease-in-out, color var(--btnTransitionLength) ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:not(:has(a)) {
+        padding: 1rem 1.5em;
+    }
+
+    a {
+        display: inline-block;
+        color: inherit;
+        text-decoration: none;
+        height: 100%;
+        width: 100%;
+        padding: 1rem 1.5em;
+    }
 
     &.dark-btn {
         background-color: var(--secondaryDark);
