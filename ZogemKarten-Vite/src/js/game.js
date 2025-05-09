@@ -17,14 +17,24 @@ const config = {
     }
 };
 
-let card;
-let drawPile;
+const suits = ['hearts', 'spades', 'diamonds', 'clubs'];
+const ranks = ['ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king'];
+
+let deck;
+let deckCards = [];
 let discardPile;
+let discardPileCards = [];
 let myHand = [];
 let maxHand = 7;
 
 function preload() {
-    this.load.image('card', '/assets/images/2_of_hearts.png');
+    for (const suit of suits) {
+        for (const rank of ranks) {
+            const key = `${rank}_of_${suit}`;
+            this.load.image(key, `/assets/images/${key}.png`);
+        }
+    }
+    
     this.load.image('card-back', '/assets/images/card_back.png');
 }
 
@@ -36,49 +46,82 @@ function create() {
     const cardWidth = canvasWidth * 0.08;
     const cardHeight = cardWidth * 1.5;
 
-    drawPile = this.add.image(canvasWidth * 0.85, canvasHeight / 2, 'card-back');
+    // Create visual deck
+    deck = this.add.image(canvasWidth * 0.85, canvasHeight / 3, 'card-back');
     const originalWidth = this.textures.get('card-back').getSourceImage().width;
     const scale = cardWidth / originalWidth;
-    drawPile.setScale(scale);
+    deck.setScale(scale);
 
-    drawPile.setInteractive();
-    drawPile.on('pointerdown', () => {
-        drawCard(this, cardWidth, cardHeight, canvasWidth, canvasHeight, drawPile.x, drawPile.y);
+    // Make deck clickable to draw a card
+    deck.setInteractive();
+    deck.on('pointerdown', () => {
+        drawCard(this, cardWidth, cardHeight, canvasWidth, canvasHeight, deck.x, deck.y);
     });
 
-    card = this.add.image(drawPileX, drawPileY, 'card-back');
-    card.setScale(scale);
+    // Create visual discard pile
+    discardPile = this.add.image(canvasWidth * 0.85, canvasHeight * 2 / 3, 'card-back');
+    discardPile.setAlpha(0); // Invisible al inicio
+    discardPile.setScale(scale);
+
+    // Add all card objects to the deck
+    for (const suit of suits) {
+        for (const rank of ranks) {
+            deckCards.push(`${rank}_of_${suit}`);
+        }
+    }
+
+    shuffleCards();
 }
 
 function update() {
     // Lógica para actualizar el juego
 }
 
+function shuffleCards() {
+    for (let i = deckCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deckCards[i], deckCards[j]] = [deckCards[j], deckCards[i]];
+    }
+}
+
 function drawCard(scene, cardWidth, cardHeight, canvasWidth, canvasHeight, drawPileX, drawPileY) {
-    if (myHand.length >= maxHand) {
+    // Hide visual deck when the last card is drawn
+    if (deckCards.length === 1) {
+        deck.setAlpha(0);    
+    }
+
+    // Do not let user draw a new card if there are no cards left, or if hand is full
+    if (myHand.length >= maxHand || deckCards.length === 0) {
         return;
     }
 
+    // Get drawn card out of the deck
+    const cardKey = deckCards.pop();
+
+    // Create visual card
     const card = scene.add.image(drawPileX, drawPileY, 'card-back');
     const originalWidth = scene.textures.get('card-back').getSourceImage().width;
     const scale = cardWidth / originalWidth;
     card.setScale(scale);
 
+    // Add card to player hand
     myHand.push(card);
 
+    // Animate card flipping halfway
     scene.tweens.add({
         targets: card,
         scaleX: 0,
         duration: 150,
         ease: 'Linear',
         onComplete: () => {
-            card.setTexture('card');
+            card.setTexture(cardKey);
 
-            // Cambiar escala de nuevo porque cambia el tamaño original
-            const newOriginalWidth = scene.textures.get('card').getSourceImage().width;
+            // Recalculate scale of card due to flipping shenaningans
+            const newOriginalWidth = scene.textures.get(cardKey).getSourceImage().width;
             const newScale = cardWidth / newOriginalWidth;
-            card.setScale(newScale, scale); // scaleX nuevo, scaleY igual que antes
+            card.setScale(newScale, scale);
 
+            // Animate rest of flipping
             scene.tweens.add({
                 targets: card,
                 scaleX: newScale,
@@ -86,6 +129,7 @@ function drawCard(scene, cardWidth, cardHeight, canvasWidth, canvasHeight, drawP
                 ease: 'Linear',
                 onComplete: () => {
                     updateHandLayout(scene, cardWidth, cardHeight);
+                    addCardInteraction(scene, card, cardWidth, cardHeight);
                 }
             });
         }
@@ -96,13 +140,14 @@ function updateHandLayout(scene, cardWidth, cardHeight) {
     const canvasWidth = scene.sys.game.config.width;
     const canvasHeight = scene.sys.game.config.height;
 
-    const spacing = cardWidth * 0.7;
+    const spacing = cardWidth * 0.5;
     const totalWidth = spacing * (myHand.length - 1);
     const startX = (canvasWidth / 2) - (totalWidth / 2);
     const posY = canvasHeight - cardHeight / 2 - 10;
 
     myHand.forEach((card, index) => {
         const posX = startX + index * spacing;
+        card.setDepth(0);
 
         scene.tweens.add({
             targets: card,
@@ -112,6 +157,70 @@ function updateHandLayout(scene, cardWidth, cardHeight) {
             ease: 'Power2'
         });
     });
+}
+
+function addCardInteraction(scene, card, cardWidth, cardHeight) {
+    const canvasHeight = scene.sys.game.config.height;
+    const posY = canvasHeight - cardHeight / 2 - 10;
+
+    card.setInteractive();
+
+    card.on('pointerdown', () => {
+        card.removeAllListeners();
+        discardCard(scene, card, cardWidth, cardHeight);
+    });
+
+    card.on('pointerover', () => {
+        scene.tweens.add({
+            targets: card,
+            y: posY - 50,
+            duration: 200,
+            ease: 'Power2'
+        });
+    });
+
+    card.on('pointerout', () => {
+        scene.tweens.add({
+            targets: card,
+            y: posY,
+            duration: 200,
+            ease: 'Power2'
+        });
+    });
+}
+
+function discardCard(scene, card, cardWidth, cardHeight) {
+    card.setDepth(discardPileCards.length);
+
+    // Eliminarla del array de mano
+    const index = myHand.indexOf(card);
+
+    if (index === -1) {
+        return;
+    }
+
+    myHand.splice(index, 1);
+
+    // Añadir al array de descartes
+    discardPileCards.push(card);
+
+    // Visual: animación a pila de descartes
+    const targetX = discardPile.x;
+    const targetY = discardPile.y;
+
+    scene.tweens.add({
+        targets: card,
+        x: targetX,
+        y: targetY,
+        duration: 400,
+        ease: 'Power2',
+        onComplete: () => {
+            card.removeAllListeners();
+        }
+    });
+
+    // Reorganizar mano
+    updateHandLayout(scene, cardWidth, cardHeight);
 }
 
 const game = new Phaser.Game(config);
