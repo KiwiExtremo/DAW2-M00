@@ -47,7 +47,7 @@ function create() {
     const cardHeight = cardWidth * 1.5;
 
     // Create visual deck
-    deck = this.add.image(canvasWidth * 0.85, canvasHeight * 0.37, 'card-back');
+    deck = this.add.image(canvasWidth * 0.85, canvasHeight * 0.63, 'card-back');
     const originalWidth = this.textures.get('card-back').getSourceImage().width;
     const scale = cardWidth / originalWidth;
     deck.setScale(scale);
@@ -59,7 +59,7 @@ function create() {
     });
 
     // Create visual discard pile
-    discardPile = this.add.image(canvasWidth * 0.85, canvasHeight * 0.63, 'card-back');
+    discardPile = this.add.image(canvasWidth * 0.85, canvasHeight * 0.37, 'card-back');
     discardPile.setAlpha(0); // Invisible al inicio
     discardPile.setScale(scale);
 
@@ -71,10 +71,48 @@ function create() {
     }
 
     shuffleCards();
+
+    addDrawButton(this);
 }
 
 function update() {
     // Lógica para actualizar el juego
+}
+
+function addDrawButton(scene) {
+    // Crear botón "Robar"
+    const buttonWidth = 100;
+    const buttonHeight = 40;
+
+    const drawButton = scene.add.graphics();
+    const radius = 10;
+    const btnX = deck.x;
+    const btnY = deck.y + deck.displayHeight / 2 + 30;
+
+    drawButton.fillStyle(0x47301E, 1);
+    drawButton.fillRoundedRect(btnX - buttonWidth / 2, btnY - buttonHeight / 2, buttonWidth, buttonHeight, radius);
+    drawButton.setInteractive(
+        new Phaser.Geom.Rectangle(btnX - buttonWidth / 2, btnY - buttonHeight / 2, buttonWidth, buttonHeight),
+        Phaser.Geom.Rectangle.Contains
+        );
+    drawButton.input.cursor = 'pointer';
+
+    const drawButtonText = scene.add.text(btnX, btnY, 'Robar', {
+        fontSize: '16px',
+        color: '#ffffff',
+        fontFamily: 'Arial'
+    }).setOrigin(0.5);
+
+    // Interacción al hacer clic
+    drawButton.on('pointerdown', () => {
+        redrawCards(scene,
+            scene.sys.game.config.width * 0.08,
+            scene.sys.game.config.width * 0.08 * 1.5,
+            scene.sys.game.config.width,
+            scene.sys.game.config.height,
+                deck.x,
+                deck.y);
+    });
 }
 
 function shuffleCards() {
@@ -134,6 +172,12 @@ function drawCard(scene, cardWidth, cardHeight, canvasWidth, canvasHeight, drawP
             });
         }
     });
+}
+
+function redrawCards(scene, cardWidth, cardHeight, canvasWidth, canvasHeight, drawPileX, drawPileY) {
+    for (card in cards) {
+        
+    }
 }
 
 function updateHandLayout(scene, cardWidth, cardHeight) {
