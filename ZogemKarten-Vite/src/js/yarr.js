@@ -78,7 +78,7 @@ function create() {
 
     shuffleCards();
 
-    addDrawButton(this);
+    addRedrawButton(this);
     addScoreButtons(this);
 
     redrawCards(this);
@@ -92,7 +92,7 @@ function startNewTurn() {
     redrawsLeft = 3;
 }
 
-function addDrawButton(scene) {
+function addRedrawButton(scene) {
     const canvasWidth = scene.sys.game.config.width;
     const cardWidth = canvasWidth * 0.08;
     const cardHeight = cardWidth * 1.5;
@@ -229,7 +229,7 @@ function redrawCards(scene) {
     const centerY = scene.sys.game.config.height / 2;
     const spacing = cardWidth * 1.1;
     const totalWidth = spacing * 4;
-    const startX = (scene.sys.game.config.width / 2) - (totalWidth / 2);
+    const startX = (scene.sys.game.config.width / 2) - (totalWidth / 2) + (cardWidth / 2);
 
     let animationsCompleted = 0;
 
