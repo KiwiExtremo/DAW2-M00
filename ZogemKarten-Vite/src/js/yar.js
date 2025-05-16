@@ -443,11 +443,17 @@ function shuffleCards() {
 }
 
 function restartDeck(scene) {
+    let totalDelay = 0;
+
     // Devolver las cartas de la mesa
     for (let i = 0; i < playingCards.length; i++) {
         const sprite = playingCards[i];
         if (sprite && sprite.cardObj) {
-            moveCardBackToDeck(scene, sprite.cardObj, sprite.x, sprite.y);
+            const delay = i * 100;
+
+            moveCardBackToDeck(scene, sprite.cardObj, sprite.x, sprite.y, delay);
+
+            totalDelay += delay;
         }
     }
 
@@ -456,20 +462,26 @@ function restartDeck(scene) {
     // Devolver las cartas de los descartes
     for (let i = 0; i < discardPileCards.length; i++) {
         const cardObj = discardPileCards[i];
-        moveCardBackToDeck(scene, cardObj, deck.x, deck.y);
+        const delay = i * 50;
+
+        moveCardBackToDeck(scene, cardObj, deck.x, deck.y, delay);
+
+        totalDelay += 50;
     }
 
     discardPileCards = [];
     
-    shuffleCards();
-    restartRedraws();
-    redrawCards(scene);
+    scene.time.delayedCall(totalDelay + 150, () => {
+        shuffleCards();
+        restartRedraws();
+        redrawCards(scene);
 
-    // Show deck again (just in case it was somehow hidden)
-    deck.setAlpha(1);
+        // Show deck again (just in case it was somehow hidden)
+        deck.setAlpha(1);
+    });
 }
 
-function moveCardBackToDeck(scene, cardObj, startX, startY) {
+function moveCardBackToDeck(scene, cardObj, startX, startY, delay = 0) {
     const sprite = cardObj.sprite;
     sprite.setDepth(-1);
 
@@ -486,6 +498,7 @@ function moveCardBackToDeck(scene, cardObj, startX, startY) {
         x: deck.x,
         y: deck.y,
         duration: 300,
+        delay: delay,
         ease: 'Power2',
         onComplete: () => {
             // Destroy card sprite after moving it
@@ -519,7 +532,9 @@ function redrawCards(scene) {
 
     // iterate through all 5 current cards
     for (let i = 0; i < 5; i++) {
-        const posX = startX + i * spacing;
+        const finalX = startX + i * spacing;
+        const finalY = centerY;
+        const delay = i * 100;
 
         const existingCard = playingCards[i];
 
@@ -535,31 +550,17 @@ function redrawCards(scene) {
         }
 
         // Draw a new card in place of the discarded one
-        drawCard(scene, cardWidth, cardHeight, deck.x, deck.y, (sprite, cardObj) => {
-            const finalY = centerY;
-            const finalX = posX;
+        drawCard(scene, cardWidth, cardHeight, deck.x, deck.y, finalX, finalY, (sprite, cardObj) => {
+            addCardInteraction(scene, cardObj, cardWidth, cardHeight, finalY);
 
-            scene.tweens.add({
-                targets: sprite,
-                x: finalX,
-                y: finalY,
-                duration: 300,
-                ease: 'Power2',
-                onComplete: () => {
-                    addCardInteraction(scene, cardObj, cardWidth, cardHeight, finalY);
+            sprite.cardObj = cardObj;
+            playingCards[i] = sprite;
 
-                    sprite.cardObj = cardObj;
-                    playingCards[i] = sprite;
-
-                    animationsCompleted++;
-
-                    // Update all possible scores based on the new cards drawn
-                    if (animationsCompleted === 5) {
-                        updatePossibleScore(scene);
-                    }
-                }
-            });
-        });
+            animationsCompleted++;
+            if (animationsCompleted === 5) {
+                updatePossibleScore(scene);
+            }
+        }, delay);
     }
 
     // Hide drawing deck if no cards remain (shouldn't happen due to redrawing limits)
@@ -568,7 +569,8 @@ function redrawCards(scene) {
     }
 }
 
-function drawCard(scene, cardWidth, cardHeight, drawX, drawY, onCompleteCallback = null) {
+function drawCard(scene, cardWidth, cardHeight, deckX, deckY, finalX, finalY, onCompleteCallback = null, delay = 0) {
+    console.log(`posicion original: (${deckX}, ${deckY}), posicion final: (${finalX}, ${finalY})`);
     // Pull drawn card out of the deck
     const cardObj = deckCards.pop();
     if (!cardObj) {
@@ -577,7 +579,7 @@ function drawCard(scene, cardWidth, cardHeight, drawX, drawY, onCompleteCallback
     }
 
     // Create card sprite
-    const sprite = scene.add.image(drawX, drawY, 'card-back');
+    const sprite = scene.add.image(deckX, deckY, 'card-back');
     const originalWidth = scene.textures.get('card-back').getSourceImage().width;
     const scale = cardWidth / originalWidth;
     sprite.setScale(scale);
@@ -585,8 +587,11 @@ function drawCard(scene, cardWidth, cardHeight, drawX, drawY, onCompleteCallback
     // Animate card flipping halfway
     scene.tweens.add({
         targets: sprite,
+        x: (deckX + finalX) / 2,
+        y: (deckY + finalY) / 2,
         scaleX: 0,
         duration: 150,
+        delay: delay,
         ease: 'Linear',
         onComplete: () => {
             // Swap from card back to card image halfway into animation
@@ -602,6 +607,8 @@ function drawCard(scene, cardWidth, cardHeight, drawX, drawY, onCompleteCallback
             // Animate rest of flipping
             scene.tweens.add({
                 targets: sprite,
+                x: finalX,
+                y: finalY,
                 scaleX: newScale,
                 duration: 150,
                 ease: 'Linear',
