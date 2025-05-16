@@ -89,6 +89,9 @@ function create() {
     const cardWidth = canvasWidth * 0.08;
     const cardHeight = cardWidth * 1.5;
 
+    // variables
+    this.isDrawing = false;
+
     // Create visual deck
     deck = this.add.image(canvasWidth * 0.85, canvasHeight * 0.63, 'card-back');
     const originalWidth = this.textures.get('card-back').getSourceImage().width;
@@ -111,12 +114,14 @@ function create() {
         }
     }
 
-    shuffleCards();
-
     addRedrawButton(this);
     addScoreButtons(this);
+    
+    shuffleCards(this);
 
-    redrawCards(this);
+    this.time.delayedCall(800, () => {
+        redrawCards(this);
+    })
 }
 
 function update() {
@@ -158,7 +163,7 @@ function addRedrawButton(scene) {
     const drawButtonText = scene.add.text(btnX, btnY, 'Robar', {
         fontSize: `${buttonHeight * 0.45}px`,
         color: colors.redraw.text,
-        fontFamily: 'Comic Sans MS',
+        fontFamily: 'Comic Neue',
         align: 'center',
         wordWrap: { width: buttonWidth - 10 }
     }).setOrigin(0.5);
@@ -166,7 +171,7 @@ function addRedrawButton(scene) {
     const redrawsLeftText = scene.add.text(btnX, btnY + buttonHeight, '3/3', {
         fontSize: `${buttonHeight * 0.45}px`,
         color: colors.redraw.textRedraws,
-        fontFamily: 'Comic Sans MS',
+        fontFamily: 'Comic Neue',
         align: 'center',
         wordWrap: { width: buttonWidth - 10 }
     }).setOrigin(0.5)
@@ -176,7 +181,9 @@ function addRedrawButton(scene) {
 
     // Button click logic
     drawButton.on('pointerdown', () => {
-        redrawCards(scene);
+        if (!scene.isDrawing) {
+            redrawCards(scene);
+        }
     });
 }
 
@@ -253,7 +260,7 @@ function addScoreButtons(scene) {
         const btnText = scene.add.text(startX + buttonWidth / 2, y + buttonHeight / 2, labels[i], {
             fontSize: `${buttonHeight * 0.4}px`,
             color: colors.score.text,
-            fontFamily: 'Comic Sans MS',
+            fontFamily: 'Comic Neue',
             align: 'center',
             wordWrap: { width: buttonWidth - 10 }
         }).setOrigin(0.5);
@@ -270,7 +277,7 @@ function addScoreButtons(scene) {
         const scoreText = scene.add.text(scoreX + scoreWidth / 2, y + scoreHeight / 2, '0', {
             fontSize: `${scoreHeight * 0.5}px`,
             color: colors.score.textScore,
-            fontFamily: 'Comic Sans MS'
+            fontFamily: 'Comic Neue'
         }).setOrigin(0.5);
 
         scene.pointsTexts.push(scoreText);
@@ -283,7 +290,7 @@ function addScoreButtons(scene) {
     scene.add.text(startX + buttonWidth / 2, totalY + buttonHeight / 2, "TOTAL", {
         fontSize: `${buttonHeight * 0.45}px`,
         color: colors.score.text,
-        fontFamily: 'Comic Sans MS'
+        fontFamily: 'Comic Neue'
     }).setOrigin(0.5);
 
     // Fondo del total
@@ -299,13 +306,11 @@ function addScoreButtons(scene) {
     totalBg.width = scoreWidth;
     totalBg.height = scoreHeight;
 
-    console.log('painted total score background, ', totalBg);
-
     // total score text
     const totalText = scene.add.text(scoreX + scoreWidth / 2, totalY + scoreHeight / 2, '0', {
         fontSize: `${scoreHeight * 0.5}px`,
         color: colors.score.textScore,
-        fontFamily: 'Comic Sans MS'
+        fontFamily: 'Comic Neue'
     }).setOrigin(0.5);
 
     // Save total score attributes to the scene 
@@ -433,16 +438,62 @@ function fixScore(rank, cards) {
     return score;
 }
 
-function shuffleCards() {
+function shuffleCards(scene) {
     for (let i = deckCards.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [deckCards[i], deckCards[j]] = [deckCards[j], deckCards[i]];
     }
 
-    // TODO animate shuffling
+    animateDeckShuffle(scene);
+}
+
+function animateDeckShuffle(scene) {
+    const numCycles = 3;
+    const numFakeCards = 3;
+    const spread = 50;
+    const offsetY = -10;
+    const cycleDuration = 300;
+
+    for (let cycle = 0; cycle < numCycles; cycle++) {
+        for (let i = 0; i < numFakeCards; i++) {
+            let direction;
+
+            if (i % 2 === 0) {
+                direction = -1;
+            } else {
+                direction = 1;
+            }
+
+            const angle = Phaser.Math.Between(-15, 15);
+            const delay = cycle * cycleDuration + i * 20;
+
+            const sprite = scene.add.image(deck.x, deck.y, 'card-back');
+            sprite.setDepth(1);
+            sprite.setScale(deck.scaleX);
+
+            const targetX = deck.x + direction * Phaser.Math.Between(spread - 10, spread + 10);
+            const targetY = deck.y + Phaser.Math.Between(offsetY - 5, offsetY + 5);
+
+            scene.tweens.add({
+                targets: sprite,
+                x: targetX,
+                y: targetY,
+                angle: angle,
+                duration: cycleDuration / 2,
+                delay: delay,
+                ease: 'Power2',
+                yoyo: true,
+                onComplete: () => {
+                    sprite.destroy();
+                }
+            });
+        }
+    }
 }
 
 function restartDeck(scene) {
+    clearLocks();
+
     let totalDelay = 0;
 
     // Devolver las cartas de la mesa
@@ -471,13 +522,16 @@ function restartDeck(scene) {
 
     discardPileCards = [];
     
-    scene.time.delayedCall(totalDelay + 150, () => {
-        shuffleCards();
-        restartRedraws();
-        redrawCards(scene);
+    scene.time.delayedCall(totalDelay, () => {
+        shuffleCards(scene);
 
-        // Show deck again (just in case it was somehow hidden)
-        deck.setAlpha(1);
+        scene.time.delayedCall(1000, () =>  {
+            restartRedraws();
+            redrawCards(scene);
+    
+            // Show deck again (just in case it was somehow hidden)
+            deck.setAlpha(1);
+        });
     });
 }
 
@@ -507,18 +561,48 @@ function moveCardBackToDeck(scene, cardObj, startX, startY, delay = 0) {
     });
 }
 
+function clearLocks() {
+    for (const cardSprite of playingCards) {
+        if (!cardSprite) continue;
+
+        const cardObj = cardSprite.cardObj;
+        if (cardObj?.lockIcon) {
+            cardObj.lockIcon.destroy();
+            delete cardObj.lockIcon;
+        }
+        cardObj.locked = false;
+
+        cardSprite.removeAllListeners();
+    }
+}
+
 function restartRedraws() {
     redrawsLeft = maxRedraws;
 }
 
 
 function redrawCards(scene) {
+    // Skip method if there's an animation ongoing
+    if (scene.isDrawing) {
+        return;
+    }
+
+    const isFirstDraw = playingCards.length === 0;
+    const unlockedCount = playingCards.filter(card => card && !card.cardObj.locked).length;
+
+    // Skip method if all cards are locked
+    if (!isFirstDraw && unlockedCount === 0) {
+        return;
+    }
+
     //  Skip method if all remaining redraws have been spent
     const hasRedrawsRemaining = updateRedrawsLeft(scene);
 
-    if (!hasRedrawsRemaining) {
+    if (!isFirstDraw && !hasRedrawsRemaining) {
         return;
     }
+
+    scene.isDrawing = true;
 
     // card variables
     const cardWidth = scene.sys.game.config.width * 0.08;
@@ -529,6 +613,7 @@ function redrawCards(scene) {
     const startX = (scene.sys.game.config.width / 2) - (totalWidth / 2) + (cardWidth / 2);
 
     let animationsCompleted = 0;
+    let cardsToDraw = 0;
 
     // iterate through all 5 current cards
     for (let i = 0; i < 5; i++) {
@@ -540,7 +625,6 @@ function redrawCards(scene) {
 
         // Keep locked card in place
         if (existingCard && existingCard.cardObj.locked) {
-            animationsCompleted++;
             continue;
         }
 
@@ -548,6 +632,8 @@ function redrawCards(scene) {
         if (existingCard) {
             discardCard(scene, existingCard.cardObj, cardWidth, cardHeight);
         }
+
+        cardsToDraw++;
 
         // Draw a new card in place of the discarded one
         drawCard(scene, cardWidth, cardHeight, deck.x, deck.y, finalX, finalY, (sprite, cardObj) => {
@@ -557,8 +643,11 @@ function redrawCards(scene) {
             playingCards[i] = sprite;
 
             animationsCompleted++;
-            if (animationsCompleted === 5) {
+
+            if (animationsCompleted === cardsToDraw) {
                 updatePossibleScore(scene);
+
+                scene.isDrawing = false;
             }
         }, delay);
     }
@@ -570,11 +659,9 @@ function redrawCards(scene) {
 }
 
 function drawCard(scene, cardWidth, cardHeight, deckX, deckY, finalX, finalY, onCompleteCallback = null, delay = 0) {
-    console.log(`posicion original: (${deckX}, ${deckY}), posicion final: (${finalX}, ${finalY})`);
     // Pull drawn card out of the deck
     const cardObj = deckCards.pop();
     if (!cardObj) {
-        console.warn("No quedan cartas en el mazo.");
         return;
     }
 
