@@ -93,13 +93,21 @@ function create() {
     this.isDrawing = false;
 
     // Create visual deck
-    deck = this.add.image(canvasWidth * 0.85, canvasHeight * 0.63, 'card-back');
+    deck = this.add.image(canvasWidth * 0.9, canvasHeight * 0.63, 'card-back');
     const originalWidth = this.textures.get('card-back').getSourceImage().width;
     const scale = cardWidth / originalWidth;
     deck.setScale(scale);
 
+    deck.setInteractive();
+    deck.on('pointerdown', () => {
+        if (!this.isDrawing) {
+            redrawCards(this);
+        }
+    });
+    deck.input.cursor = 'pointer';
+
     // Create visual discard pile
-    discardPile = this.add.image(canvasWidth * 0.85, canvasHeight * 0.37, 'card-back');
+    discardPile = this.add.image(canvasWidth * 0.9, canvasHeight * 0.37, 'card-back');
     discardPile.setAlpha(0); // Invisible al inicio
     discardPile.setScale(scale);
 
@@ -214,6 +222,7 @@ function addScoreButtons(scene) {
     scene.pointsTexts = [];
     scene.scoreButtons = [];
     scene.finalScores = [null, null, null, null, null, null];
+    scene.finalRivalScores = [null, null, null, null, null, null]; // TODO make 2nd column of scores
 
     for (let i = 0; i < labels.length; i++) {
         const y = startY + i * buttonSpacing;
@@ -465,7 +474,7 @@ function animateDeckShuffle(scene) {
             }
 
             const angle = Phaser.Math.Between(-15, 15);
-            const delay = cycle * cycleDuration + i * 20;
+            const delay = cycle * cycleDuration - 100;
 
             const sprite = scene.add.image(deck.x, deck.y, 'card-back');
             sprite.setDepth(1);
@@ -496,7 +505,7 @@ function restartDeck(scene) {
 
     let totalDelay = 0;
 
-    // Devolver las cartas de la mesa
+    // Move cards on play back to deck
     for (let i = 0; i < playingCards.length; i++) {
         const sprite = playingCards[i];
         if (sprite && sprite.cardObj) {
@@ -510,7 +519,7 @@ function restartDeck(scene) {
 
     playingCards = [];
 
-    // Devolver las cartas de los descartes
+    // Move discardede cards back to deck
     for (let i = 0; i < discardPileCards.length; i++) {
         const cardObj = discardPileCards[i];
         const delay = i * 50;
@@ -522,9 +531,11 @@ function restartDeck(scene) {
 
     discardPileCards = [];
     
+    // Wait for all card moving animations to be finished before shuffling deck animation
     scene.time.delayedCall(totalDelay, () => {
         shuffleCards(scene);
 
+        // Wait for shuffle animation before starting next round
         scene.time.delayedCall(1000, () =>  {
             restartRedraws();
             redrawCards(scene);
@@ -562,6 +573,7 @@ function moveCardBackToDeck(scene, cardObj, startX, startY, delay = 0) {
 }
 
 function clearLocks() {
+    // Check each card if it's locked
     for (const cardSprite of playingCards) {
         if (!cardSprite) continue;
 
@@ -610,7 +622,7 @@ function redrawCards(scene) {
     const centerY = scene.sys.game.config.height / 2;
     const spacing = cardWidth * 1.1;
     const totalWidth = spacing * 4;
-    const startX = (scene.sys.game.config.width / 2) - (totalWidth / 2) + (cardWidth / 2);
+    const startX = (scene.sys.game.config.width / 2) - (totalWidth / 2) + (cardWidth * 1.2);
 
     let animationsCompleted = 0;
     let cardsToDraw = 0;
